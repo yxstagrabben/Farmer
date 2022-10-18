@@ -8,7 +8,7 @@ public:
     {
         return farm;
     }
-    float getMoney()
+    int getMoney()
     {
         return money;
     }
@@ -55,7 +55,7 @@ public:
 
 private:
     int farm = 0;
-    float money = 150;
+    int money = 15000;
     int numCows = 0;
     int maxCows = 0;
     int numChickens = 0;
@@ -216,7 +216,7 @@ void buySellAnimals(bool buying, Farmer& farmer, Farm& farm, Cow& cow, Chicken& 
                 if(farm.getMaxCow(farmer.getFarm())-1 >= farmer.getNumCows())
                 {
                     cow.setAge(farmer.getNumCows()-1, 1);
-                    farmer.setMoney(-50*upgrade.getDiscountPrice(upgrade.getDiscountLevel()));
+                    farmer.setMoney(-cow.getPrice(1)*upgrade.getDiscount(upgrade.getDiscountLevel()));
                     farmer.boughtCows();
                     cout << "Purchase complete! You now have " + to_string(farmer.getNumCows()) + " cows and you have " + to_string(farmer.getMoney()) + " USD left!\n";
                 }
@@ -230,8 +230,8 @@ void buySellAnimals(bool buying, Farmer& farmer, Farm& farm, Cow& cow, Chicken& 
             {
                 if(farm.getMaxChickens(farmer.getFarm())-1 >= farmer.getNumChickens())
                 {
-                    chicken.setAge(farmer.getNumChickens(), 1);
-                    farmer.setMoney(-10*upgrade.getDiscountPrice(upgrade.getDiscountLevel()));
+                    chicken.setAge(farmer.getNumChickens()-1, 1);
+                    farmer.setMoney(-chicken.getPrice(1)*upgrade.getDiscount(upgrade.getDiscountLevel()));
                     farmer.boughtChickens();
                     cout << "Purchase complete! You now have " + to_string(farmer.getNumChickens()) + " chickens and you have " + to_string(farmer.getMoney()) + " USD left!\n";
                 }
@@ -250,17 +250,18 @@ void buySellAnimals(bool buying, Farmer& farmer, Farm& farm, Cow& cow, Chicken& 
             {
                 if(cow.getAge(x) > 0)
                 {
-                    cout << "Number " + to_string(x+1) + ", age is " + to_string(cow.getAge(x)) + " and the value of the cow is " + to_string(cow.getPrice(cow.getAge(x))*upgrade.getSellingMultPrice(upgrade.getSellingLevel())) + "USD\n";
+                    cout << "Number " + to_string(x+1) + ", age is " + to_string(cow.getAge(x)) + " and the value of the cow is " + to_string(static_cast<int>(cow.getPrice(cow.getAge(x))*upgrade.getSellingMult(upgrade.getSellingLevel()))) + "USD\n";
                 }
             }
             cout << "Type the number of what cow you want to sell: ";
             cin >> sellNum;
             if(sellNum <= farmer.getNumCows())
             {
-                cout << "Are you sure you want to sell cow number " + to_string(sellNum) + " worth " + to_string(cow.getPrice(cow.getAge(sellNum-1))*upgrade.getSellingMultPrice(upgrade.getSellingLevel())) + "USD, if yes press 1 and if not press 2: ";
+                cout << "Are you sure you want to sell cow number " + to_string(sellNum) + " worth " + to_string(cow.getPrice(static_cast<int>(cow.getAge(sellNum-1))*upgrade.getSellingMult(upgrade.getSellingLevel()))) + "USD, if yes press 1 and if not press 2: ";
                 cin >> temp;
                 if(temp == 1)
                 {
+                    farmer.setMoney(cow.getPrice(sellNum));
                     if (sellNum < farmer.getNumCows())
                     {
                         for (int i = sellNum; i <= farmer.getNumCows(); i++)
@@ -285,17 +286,18 @@ void buySellAnimals(bool buying, Farmer& farmer, Farm& farm, Cow& cow, Chicken& 
             {
                 if(chicken.getAge(x) > 0)
                 {
-                    cout << "Number " + to_string(x+1) + ", age is " + to_string(chicken.getAge(x)) + " and the value of the chicken is " + to_string(chicken.getPrice(chicken.getAge(x))*upgrade.getSellingMultPrice(upgrade.getSellingLevel())) + "USD\n";
+                    cout << "Number " + to_string(x+1) + ", age is " + to_string(chicken.getAge(x)) + " and the value of the chicken is " + to_string(static_cast<int>(chicken.getPrice(chicken.getAge(x))*upgrade.getSellingMult(upgrade.getSellingLevel()))) + "USD\n";
                 }
             }
             cout << "Type the number of what chicken you want to sell: ";
             cin >> sellNum;
             if(sellNum <= farmer.getNumChickens())
             {
-                cout << "Are you sure you want to sell chicken number " + to_string(sellNum) + " worth " + to_string(chicken.getPrice(chicken.getAge(sellNum-1))*upgrade.getSellingMultPrice(upgrade.getSellingLevel())) + "USD, if yes press 1 and if not press 2: ";
+                cout << "Are you sure you want to sell chicken number " + to_string(sellNum) + " worth " + to_string(static_cast<int>(chicken.getPrice(chicken.getAge(sellNum-1))*upgrade.getSellingMult(upgrade.getSellingLevel()))) + "USD, if yes press 1 and if not press 2: ";
                 cin >> temp;
                 if(temp == 1)
                 {
+                    farmer.setMoney(chicken.getPrice(sellNum));
                     if (sellNum < farmer.getNumChickens())
                     {
                         for (int i = sellNum; i <= farmer.getNumChickens(); i++)
@@ -327,7 +329,7 @@ void checkAnimals(Farmer& farmer, Cow& cow, Chicken& chicken, Upgrades& upgrade)
         {
             if(cow.getAge(x) > 0)
             {
-                cout << "Cow number " + to_string(x+1) + ", age is " + to_string(cow.getAge(x)) + " and the value of the cow is " + to_string(cow.getPrice(cow.getAge(x))*upgrade.getSellingMultPrice(upgrade.getSellingLevel())) + "USD\n";
+                cout << "Cow number " + to_string(x+1) + ", age is " + to_string(cow.getAge(x)) + " and the value of the cow is " + to_string(static_cast<int>(cow.getPrice(cow.getAge(x))*upgrade.getSellingMult(upgrade.getSellingLevel()))) + "USD\n";
             }
         }
     }
@@ -337,7 +339,7 @@ void checkAnimals(Farmer& farmer, Cow& cow, Chicken& chicken, Upgrades& upgrade)
         {
             if(chicken.getAge(x) > 0)
             {
-                cout << "Chicken number " + to_string(x+1) + ", age is " + to_string(chicken.getAge(x)) + " and the value of the chicken is " + to_string(chicken.getPrice(chicken.getAge(x))*upgrade.getSellingMultPrice(upgrade.getSellingLevel())) + "USD\n";
+                cout << "Chicken number " + to_string(x+1) + ", age is " + to_string(chicken.getAge(x)) + " and the value of the chicken is " + to_string(static_cast<int>(chicken.getPrice(chicken.getAge(x))*upgrade.getSellingMult(upgrade.getSellingLevel()))) + "USD\n";
             }
         }
     }
@@ -348,7 +350,7 @@ void checkAnimals(Farmer& farmer, Cow& cow, Chicken& chicken, Upgrades& upgrade)
         {
             if(cow.getAge(x) > 0)
             {
-                cout << "Number " + to_string(x+1) + ", age is " + to_string(cow.getAge(x)) + " and the value of the cow is " + to_string(cow.getPrice(cow.getAge(x))*upgrade.getSellingMultPrice(upgrade.getSellingLevel())) + "USD\n";
+                cout << "Number " + to_string(x+1) + ", age is " + to_string(cow.getAge(x)) + " and the value of the cow is " + to_string(cow.getPrice(static_cast<int>(cow.getAge(x))*upgrade.getSellingMult(upgrade.getSellingLevel()))) + "USD\n";
             }
         }
         cout << "\n";
@@ -357,7 +359,7 @@ void checkAnimals(Farmer& farmer, Cow& cow, Chicken& chicken, Upgrades& upgrade)
         {
             if(chicken.getAge(x) > 0)
             {
-                cout << "Number " + to_string(x+1) + ", age is " + to_string(chicken.getAge(x)) + " and the value of the chicken is " + to_string(chicken.getPrice(chicken.getAge(x))*upgrade.getSellingMultPrice(upgrade.getSellingLevel())) + "USD\n";
+                cout << "Number " + to_string(x+1) + ", age is " + to_string(chicken.getAge(x)) + " and the value of the chicken is " + to_string(static_cast<int>(chicken.getPrice(chicken.getAge(x))*upgrade.getSellingMult(upgrade.getSellingLevel()))) + "USD\n";
             }
         }
     }
@@ -391,43 +393,95 @@ bool farmUpgrade(Farmer& farmer, Farm& farm)
     }
 }
 
-void upgrades(Upgrades& upgrade)
-{
+void upgrades(Farmer& farmer, Upgrades& upgrade) {
     int temp = 0;
-    cout << "Upgrades:\n";
-    cout << "Selling Multiplier for selling animals:\n ";
-    if(upgrade.getSellingLevel() <= 4)
+    if (farmer.getMoney() >= upgrade.getSellingMultPrice(upgrade.getSellingLevel() + 1) || farmer.getMoney() >= upgrade.getDiscountPrice(upgrade.getDiscountLevel() + 1))
     {
-        cout << "Current level is " + to_string(upgrade.getSellingLevel()) + " but can be upgraded for " + to_string(upgrade.getSellingMultPrice(upgrade.getSellingLevel()+1)) + "USD!\n";
-    }
-    else
-    {
-        cout << "Your selling multiplier is maxed out level is at: " + to_string(upgrade.getSellingLevel()) + "\n";
-    }
-    cout << "\n";
-    cout << "Discount Multiplier for buying animals:\n ";
-    if(upgrade.getDiscountLevel() <= 4)
-    {
-        cout << "Current level is " + to_string(upgrade.getDiscountLevel()) + " but can be upgraded for " + to_string(upgrade.getDiscountPrice(upgrade.getDiscountLevel()+1))+ "USD!\n";
-    }
-    else
-    {
-        cout << "Your selling multiplier is maxed out level is at: " + to_string(upgrade.getSellingLevel()) + "\n";
-    }
-    cout << "\n";
-    cout << "If you want to purchase selling multiplier press 1, if you want to upgrade the discount multiplier press 2: ";
-    cin >> temp;
-    if(temp == 1)
-    {
-        upgrade.setSellingMultLevel();
-        cout << "Selling multiplier now at " + to_string(upgrade.getSellingMult(upgrade.getSellingLevel())) + "\n";
-    }
-    else if(temp == 2)
-    {
-        upgrade.setDiscountLevel();
-        cout << "Discount multiplier now at " + to_string(upgrade.getDiscount(upgrade.getDiscountLevel())) + "\n";
-    }
+        cout << "Upgrades:\n";
+        cout << "Selling Multiplier for selling animals:\n ";
+        if (upgrade.getSellingLevel() <= 4) {
+            cout << "Current level is " + to_string(upgrade.getSellingLevel()) + " but can be upgraded for " +
+                    to_string(upgrade.getSellingMultPrice(upgrade.getSellingLevel() + 1)) + "USD!\n";
+        } else {
+            cout << "Your selling multiplier is maxed out level is at: " + to_string(upgrade.getSellingLevel()) + "\n";
+        }
+        cout << "\n";
+        cout << "Discount Multiplier for buying animals:\n ";
+        if (upgrade.getDiscountLevel() <= 3) {
+            cout << "Current level is " + to_string(upgrade.getDiscountLevel()) + " but can be upgraded for " +
+                    to_string(upgrade.getDiscountPrice(upgrade.getDiscountLevel() + 1)) + "USD!\n";
+        } else {
+            cout << "Your selling multiplier is maxed out level is at: " + to_string(upgrade.getSellingLevel()) + "\n";
+        }
+        cout << "\n";
+        cout
+                << "If you want to purchase selling multiplier press 1, if you want to upgrade the discount multiplier press 2 or press 3 if you want to return to menu: ";
+        cin >> temp;
+        if (temp == 1) {
+            upgrade.setSellingMultLevel();
+            cout << "Selling multiplier now at " + to_string(upgrade.getSellingMult(upgrade.getSellingLevel())) + "\n";
+        } else if (temp == 2) {
+            upgrade.setDiscountLevel();
+            cout << "Discount multiplier now at " + to_string(upgrade.getDiscount(upgrade.getDiscountLevel())) + "\n";
+        } else {
 
+        }
+    }
+    else if(farmer.getMoney() >= upgrade.getSellingMultPrice(upgrade.getSellingLevel()+1))
+    {
+        cout << "Upgrades:\n";
+        cout << "You only have enough money for Selling Multiplier for selling animals:\n ";
+        if(upgrade.getSellingLevel() <= 4)
+        {
+            cout << "Current level is " + to_string(upgrade.getSellingLevel()) + " but can be upgraded for " + to_string(upgrade.getSellingMultPrice(upgrade.getSellingLevel()+1)) + "USD!\n";
+        }
+        else
+        {
+            cout << "Your selling multiplier is maxed out level is at: " + to_string(upgrade.getSellingLevel()) + "\n";
+        }
+        cout << "\n";
+        cout << "If you want to purchase selling multiplier press 1, if you want to go back to menu press 2: ";
+        cin >> temp;
+        if(temp == 1)
+        {
+            upgrade.setSellingMultLevel();
+            farmer.setMoney(-upgrade.getSellingMultPrice(upgrade.getSellingLevel()));
+            cout << "Selling multiplier now at " + to_string(upgrade.getSellingMult(upgrade.getSellingLevel())) + "\n";
+        }
+        else
+        {
+
+        }
+    }
+    else if(farmer.getMoney() >= upgrade.getDiscountPrice(upgrade.getDiscountLevel()+1))
+    {
+        cout << "Discount Multiplier for buying animals:\n ";
+        if(upgrade.getDiscountLevel() <= 3)
+        {
+            cout << "Current level is " + to_string(upgrade.getDiscountLevel()) + " but can be upgraded for " + to_string(upgrade.getDiscountPrice(upgrade.getDiscountLevel()+1))+ "USD!\n";
+        }
+        else
+        {
+            cout << "Your discount multiplier is maxed out level is at: " + to_string(upgrade.getDiscountLevel()) + "\n";
+        }
+        cout << "\n";
+        cout << "If you want to purchase discount multiplier press 1, if you want to go back to menu press 2: ";
+        cin >> temp;
+        if(temp == 1)
+        {
+            upgrade.setDiscountLevel();
+            farmer.setMoney(-upgrade.getDiscountPrice(upgrade.getDiscountLevel()));
+            cout << "Discount multiplier now at " + to_string(upgrade.getDiscount(upgrade.getDiscountLevel())) + "\n";
+        }
+        else
+        {
+
+        }
+    }
+    else
+    {
+        cout << "You don't have enough money for the upgrades get more to see what upgrades are possible! :) \n";
+    }
 }
 
 void increaseYear(Farmer& farmer, Cow& cow, Chicken& chicken)
@@ -484,7 +538,7 @@ int main() {
                 }
                 break;
             case 6: //Other upgrades
-                upgrades(upgrade);
+                upgrades(farmer, upgrade);
                 break;
             case 7: //Move to next year
                 increaseYear(farmer, cow, chicken);
