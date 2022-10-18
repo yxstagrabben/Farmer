@@ -1,0 +1,3 @@
+/schooldev/Bonde/cmake-build-debug/CMakeFiles/Bonde.dir
+/schooldev/Bonde/cmake-build-debug/CMakeFiles/edit_cache.dir
+/schooldev/Bonde/cmake-build-debug/CMakeFiles/rebuild_cache.dir
