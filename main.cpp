@@ -32,9 +32,17 @@ public:
     {
         numCows += 1;
     }
+    void soldCows()
+    {
+        numCows -= 1;
+    }
     void boughtChickens()
     {
         numChickens += 1;
+    }
+    void soldChickens()
+    {
+        numChickens -= 1;
     }
     int getNumCows()
     {
@@ -259,6 +267,12 @@ void buySellAnimals(bool buying, Farmer& farmer, Farm& farm, Cow& cow, Chicken& 
                         {
                             cow.setAge(i, cow.getAge(i+1));
                         }
+                        farmer.soldCows();
+                    }
+                    else if (sellNum = farmer.getNumCows())
+                    {
+                        cow.setAge(sellNum, 0);
+                        farmer.soldCows();
                     }
                 }
             }
@@ -288,6 +302,12 @@ void buySellAnimals(bool buying, Farmer& farmer, Farm& farm, Cow& cow, Chicken& 
                         {
                             chicken.setAge(i, chicken.getAge(i+1));
                         }
+                        farmer.soldChickens();
+                    }
+                    else if (sellNum = farmer.getNumChickens())
+                    {
+                        chicken.setAge(sellNum, 0);
+                        farmer.soldChickens();
                     }
                 }
             }
