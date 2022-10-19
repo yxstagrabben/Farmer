@@ -156,7 +156,7 @@ public:
     {
         discountLevel += 1;
     }
-    float getSellingMult(int o)
+    int getSellingMult(int o)
     {
         return sellingMult[o];
     }
@@ -261,7 +261,7 @@ void buySellAnimals(bool buying, Farmer& farmer, Farm& farm, Cow& cow, Chicken& 
                 cin >> temp;
                 if(temp == 1)
                 {
-                    farmer.setMoney(cow.getPrice(sellNum));
+                    farmer.setMoney(static_cast<int>(cow.getPrice(sellNum)*upgrade.getSellingMult(upgrade.getSellingLevel())));
                     if (sellNum < farmer.getNumCows())
                     {
                         for (int i = sellNum; i <= farmer.getNumCows(); i++)
@@ -297,7 +297,7 @@ void buySellAnimals(bool buying, Farmer& farmer, Farm& farm, Cow& cow, Chicken& 
                 cin >> temp;
                 if(temp == 1)
                 {
-                    farmer.setMoney(chicken.getPrice(sellNum));
+                    farmer.setMoney(static_cast<int>(cow.getPrice(sellNum)*upgrade.getSellingMult(upgrade.getSellingLevel())));
                     if (sellNum < farmer.getNumChickens())
                     {
                         for (int i = sellNum; i <= farmer.getNumChickens(); i++)
@@ -486,11 +486,11 @@ void upgrades(Farmer& farmer, Upgrades& upgrade) {
 
 void increaseYear(Farmer& farmer, Cow& cow, Chicken& chicken)
 {
-    for(int x = 0; x <= farmer.getNumCows(); x++)
+    for(int x = 0; x <= farmer.getNumCows()-1; x++)
     {
         cow.newYearCow(x);
     }
-    for(int x = 0; x <= farmer.getNumChickens(); x++)
+    for(int x = 0; x <= farmer.getNumChickens()-1; x++)
     {
         chicken.newYearChicken(x);
     }
