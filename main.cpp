@@ -56,7 +56,7 @@ public: //Making getters and setters for the private variables
 
 private:
     int farm = 0;
-    int money = 15000;
+    int money = 1500;
     int numCows = 0;
     int maxCows = 0;
     int numChickens = 0;
