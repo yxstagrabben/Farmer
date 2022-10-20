@@ -1,9 +1,10 @@
+//Bugs known about is when increasing year it dosnt work and when inputing a string/char instead it crashes aswell! But everything works
 #include <iostream>
 using namespace  std;
 
-class Farmer
+class Farmer // Declaring a farmer class
 {
-public:
+public: //Making getters and setters for the private variables
     int getFarm()
     {
         return farm;
@@ -325,7 +326,7 @@ void checkAnimals(Farmer& farmer, Cow& cow, Chicken& chicken, Upgrades& upgrade)
     cin >> temp;
     if(temp == 1)
     {
-        for(int x = 0; x <= farmer.getNumCows()-1; x++)
+        for(int x = 0; x <= farmer.getNumCows()-1; x++) //Minus 1 because num cows is the actual amount of animals but when accessing an array you start from 0 and not 1 hence the minus 1
         {
             if(cow.getAge(x) > 0)
             {
